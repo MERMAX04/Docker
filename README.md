@@ -4,9 +4,19 @@ A small two-container portfolio project for demonstrating Dockerfile and Docker 
 
 ## System
 
-- `web`: Caddy serves `src/index.html` and proxies `/api/*` to `api`.
+- `web`: Caddy serves `src/index.html` and proxies `/api/*` to `resume-api`.
 - `resume-api`: A custom Node.js image built from `backend/Dockerfile` returns portfolio JSON.
 - `system-diagram.md`: Mermaid Markdown diagram for the GitHub project.
+
+## System Diagram
+
+```mermaid
+flowchart LR
+	Browser["Visitor Browser"] -->|HTTP :8081| Web["web container\nCaddy static server"]
+	Web -->|static files| Page["Portfolio page"]
+	Web -->|/api/* proxy| API["resume-api container\nNode.js + Express :3000"]
+	API -->|JSON status| Web
+```
 
 ## Run the project
 
