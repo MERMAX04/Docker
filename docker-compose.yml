@@ -1,22 +1,27 @@
-# Compose connects the web and api services on one private network.
+# Compose เชื่อมต่อ service ทั้งสองให้อยู่ใน network ภายในเดียวกัน
 services:
   web:
-    # Caddy serves the portfolio and routes /api requests to the API container.
+    # ใช้ Caddy เสิร์ฟหน้า Portfolio และส่ง request /api ไปยัง API container
     image: caddy:2-alpine
+    # map port 8081 ของเครื่องไปยัง port 80 ภายใน web container
     ports:
       - "8081:80"
+    # mount ไฟล์หน้าเว็บและ Caddyfile แบบอ่านอย่างเดียว
     volumes:
       - ./src:/usr/share/caddy:ro
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    # ให้ web ทำงานร่วมกับ service resume-api
     depends_on:
       - resume-api
 
   resume-api:
-    # Build a personal image from the Dockerfile in the backend folder.
+    # สร้าง image ของ API จาก Dockerfile ในโฟลเดอร์ backend
     build:
       context: ./backend
       dockerfile: Dockerfile
+    # เปิด port 3000 ให้ service อื่นใน Compose network ติดต่อได้
     expose:
       - "3000"
+    # กำหนด port ที่ Express API ใช้งาน
     environment:
       PORT: 3000
