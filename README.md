@@ -1,12 +1,12 @@
 # Portfolio Docker Compose Lab
 
-A small two-container portfolio project for demonstrating Dockerfile and Docker Compose.
+โปรเจกต์ Portfolio ขนาดเล็กที่ใช้ 2 containers ทำงานร่วมกัน เพื่อสาธิตการใช้งาน Dockerfile และ Docker Compose
 
-## System
+## ระบบ
 
-- `web`: Caddy serves `src/index.html` and proxies `/api/*` to `resume-api`.
-- `resume-api`: A custom Node.js image built from `backend/Dockerfile` returns portfolio JSON.
-- `system-diagram.md`: Mermaid Markdown diagram for the GitHub project.
+- `web`: ใช้ Caddy แสดงไฟล์ `src/index.html` และส่งต่อ request `/api/*` ไปยัง `resume-api`
+- `resume-api`: image Node.js ที่สร้างจาก `backend/Dockerfile` ทำหน้าที่ส่งข้อมูล Portfolio ในรูปแบบ JSON
+- `system-diagram.md`: ไฟล์ System Diagram ที่เขียนด้วย Mermaid Markdown
 
 ## System Diagram
 
@@ -18,19 +18,25 @@ flowchart LR
 	API -->|JSON status| Web
 ```
 
-## Run the project
+## การทำงานของระบบ
 
 ```bash
 docker compose build --no-cache
 docker compose up
 ```
 
-Open <http://localhost:8081>. The footer text is loaded from the API container.
+คำสั่งแรกใช้ build image ใหม่โดยไม่ใช้ cache และคำสั่งที่สองใช้เริ่มต้นระบบ
 
-Test the API directly from the host:
+เปิดเว็บไซต์ที่ <http://localhost:8081> โดยข้อความด้านล่างของหน้าเว็บจะถูกโหลดมาจาก API container
+
+ทดสอบ API จากเครื่อง host:
 
 ```bash
 curl http://localhost:8081/api/status
 ```
 
-Stop the containers with `Ctrl+C`, or run `docker compose down` in another terminal.
+หยุดระบบด้วย `Ctrl+C` หรือใช้คำสั่งต่อไปนี้:
+
+```bash
+docker compose down
+```
