@@ -1,0 +1,22 @@
+# Compose connects the web and api services on one private network.
+services:
+  web:
+    # Caddy serves the portfolio and routes /api requests to the API container.
+    image: caddy:2-alpine
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/usr/share/caddy:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - resume-api
+
+  resume-api:
+    # Build a personal image from the Dockerfile in the backend folder.
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    environment:
+      PORT: 3000

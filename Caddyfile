@@ -1,0 +1,17 @@
+# Caddy listens on port 80 inside the web container.
+:80 {
+  # Keep route order predictable: API proxy first, static files second.
+  route {
+    # Remove /api before forwarding the request to the API service.
+    handle_path /api/* {
+      reverse_proxy resume-api:3000
+    }
+
+    # Serve the portfolio files from Caddy's standard document directory.
+    root * /usr/share/caddy
+    file_server
+
+    # Compress responses to reduce transfer size.
+    encode zstd gzip
+  }
+}
